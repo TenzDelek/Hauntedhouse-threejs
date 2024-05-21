@@ -82,6 +82,36 @@ const bush4=new THREE.Mesh(bushGeometry,bushMaterial)
 bush4.scale.set(0.15,0.15,0.15) //we can us setscalar here
 bush4.position.set(-1,0.05,2.6)
 house.add(bush1,bush2,bush3,bush4)
+
+//grave
+const graveGeomtry=new THREE.BoxGeometry(0.6,0.8,0.2)
+const graveMaterials= new THREE.MeshStandardMaterial()
+
+
+
+const graves=new THREE.Group()
+scene.add(graves)
+
+for(let i=0;i<30;i++)
+    {
+        const radius=3 + Math.random()*4
+        const angle=Math.random() * Math.PI *2
+        const x=Math.sin(angle) * radius
+        const z=Math.cos(angle) * radius
+        const grave=new THREE.Mesh(graveGeomtry,graveMaterials)
+        grave.position.x=x
+        grave.position.y= Math.random() * 0.4
+        grave.position.z=z
+
+        //for rotation
+        grave.rotation.x= (Math.random() - 0.5) * 0.4
+        grave.rotation.y= (Math.random() - 0.5) * 0.4
+        grave.rotation.z= (Math.random() - 0.5) * 0.4
+        graves.add(grave)
+    }
+
+
+
 /**
  * Lights
  */
