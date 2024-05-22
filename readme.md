@@ -12,3 +12,30 @@ one to is at front resulting in face colliding effect
 4. scale
 - for all at once we can use .set
 - if all x,y,z are same use .setScalar
+
+5. to apply alpha 
+- use transparent as true
+
+# texture:
+- AO (ambient occlusion): Prevents the ambient light being applied to crevices
+- Diffuse: The actual color
+- Displacement: Will move the vertices up and down to create elevations
+- Normal: Will fake the orientation to create details. DX and GL are different ways of orienting the normals and we need to go for GL.
+- Rough: How smooth or rough the material is
+- Bump: Like the normal map, but it’s a grayscale value (we don’t need it)
+- Metal: Defines the metallic parts (we need this one if available)
+
+# photo format
+- EXR : large file size
+- PNG : Medium file size with no compression artefacts
+- JPG : small size with potentials compression
+artefacts
+
+# normally
+- we use jpg for all texture except for normal where we use png as it carries more data
+
+# to check whether the correct texture is loaded 
+- press f12
+- go to network tab and disable cache
+- click on img and reload 
+check whether image are there by seeing preview

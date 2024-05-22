@@ -15,6 +15,41 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+
+//texture
+const textureloader=new THREE.TextureLoader()
+//floor
+const flooralphatexture= textureloader.load('./floor/alpha.jpg')
+const floorcolortexture= textureloader.load('./floor/concrete_pavers_1k/concrete_pavers_diff_1k.jpg')
+const floorarmtexture= textureloader.load('./floor/concrete_pavers_1k/concrete_pavers_arm_1k.jpg')
+const floornormaltexture= textureloader.load('./floor/concrete_pavers_1k/concrete_pavers_nor_gl_1k.jpg')
+const floordisplacementtexture= textureloader.load('./floor/concrete_pavers_1k/concrete_pavers_disp_1k.jpg')
+
+//wall
+const wallcolortexture= textureloader.load('./wall/rock_wall_08_1k/rock_wall_08_diff_1k.jpg')
+const wallarmtexture= textureloader.load('./wall/rock_wall_08_1k/rock_wall_08_arm_1k.jpg')
+const wallnormaltexture= textureloader.load('./wall/rock_wall_08_1k/rock_wall_08_nor_gl_1k.jpg')
+
+//fixing texture color
+floorcolortexture.colorSpace=THREE.SRGBColorSpace
+wallcolortexture.colorSpace=THREE.SRGBColorSpace
+//for scale we repeat the texture making it small
+floorcolortexture.repeat.set(6,6)
+floorcolortexture.wrapS= THREE.RepeatWrapping
+floorcolortexture.wrapT= THREE.RepeatWrapping
+
+floorarmtexture.repeat.set(6,6)
+floorarmtexture.wrapS= THREE.RepeatWrapping
+floorarmtexture.wrapT= THREE.RepeatWrapping
+
+floornormaltexture.repeat.set(6,6)
+floornormaltexture.wrapS= THREE.RepeatWrapping
+floornormaltexture.wrapT= THREE.RepeatWrapping
+
+floordisplacementtexture.repeat.set(6,6)
+floordisplacementtexture.wrapS= THREE.RepeatWrapping
+floordisplacementtexture.wrapT= THREE.RepeatWrapping
+
 /**
  * House
  */
@@ -26,9 +61,24 @@ const scene = new THREE.Scene()
 // scene.add(sphere)
 //floor
 const floor =new THREE.Mesh(
-    new THREE.PlaneGeometry(20,20),
-    new THREE.MeshStandardMaterial()
+    new THREE.PlaneGeometry(20,20,100,100),
+    new THREE.MeshStandardMaterial({
+        alphaMap:flooralphatexture,
+        transparent:true,
+        map:floorcolortexture,
+        aoMap:floorarmtexture,
+        roughnessMap:floorarmtexture,
+        metalnessMap:floorarmtexture,
+        normalMap:floornormaltexture,
+        displacementMap:floordisplacementtexture,
+        displacementScale:0.1, //this two are not needed for now (as we are using tile)
+        displacementBias:-0.1
+    
+    })
 )
+
+gui.add(floor.material, 'displacementScale').min(0).max(1).step(0.001).name('floorDisplacementScale')
+gui.add(floor.material, 'displacementBias').min(-1).max(1).step(0.001).name('floorDisplacementBias')
 floor.rotation.x= - Math.PI * 0.5
 scene.add(floor)
 
@@ -38,7 +88,13 @@ scene.add(house)
 //wall
 const walls=new THREE.Mesh(
     new THREE.BoxGeometry(4,2.5,4),//width,height,depth
-    new THREE.MeshStandardMaterial()
+    new THREE.MeshStandardMaterial({
+        map:wallcolortexture,
+        aoMap:wallarmtexture,
+        roughnessMap:wallarmtexture,
+        metalnessMap:wallarmtexture,
+        normalMap:wallnormaltexture,
+    })
 )
 walls.position.y += 1.25 // as 2.5/2 is 1.25
 house.add(walls)
