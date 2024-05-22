@@ -30,10 +30,61 @@ const wallcolortexture= textureloader.load('./wall/rock_wall_08_1k/rock_wall_08_
 const wallarmtexture= textureloader.load('./wall/rock_wall_08_1k/rock_wall_08_arm_1k.jpg')
 const wallnormaltexture= textureloader.load('./wall/rock_wall_08_1k/rock_wall_08_nor_gl_1k.jpg')
 
+
+//roof
+const roofcolortexture= textureloader.load('./roof/roof_slates_02_1k/roof_slates_02_diff_1k.jpg')
+const roofarmtexture= textureloader.load('./roof/roof_slates_02_1k/roof_slates_02_arm_1k.jpg')
+const roofnormaltexture= textureloader.load('./roof/roof_slates_02_1k/roof_slates_02_nor_gl_1k.jpg')
+
+//bush
+const bushcolortexture= textureloader.load('./bush/leaves_forest_ground_1k/leaves_forest_ground_diff_1k.jpg')
+const busharmtexture= textureloader.load('./bush/leaves_forest_ground_1k/leaves_forest_ground_arm_1k.jpg')
+const bushnormaltexture= textureloader.load('./bush/leaves_forest_ground_1k/leaves_forest_ground_nor_gl_1k.jpg')
+
+//grave
+const gravecolortexture= textureloader.load('./grave/plastered_stone_wall_1k/plastered_stone_wall_diff_1k.jpg')
+const gravearmtexture= textureloader.load('./grave/plastered_stone_wall_1k/plastered_stone_wall_arm_1k.jpg')
+const gravenormaltexture= textureloader.load('./grave/plastered_stone_wall_1k/plastered_stone_wall_nor_gl_1k.jpg')
+
+//door
+const doorColorTexture = textureloader.load('./door/color.jpg')
+const doorAlphaTexture = textureloader.load('./door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureloader.load('./door/ambientOcclusion.jpg')
+const doorHeightTexture = textureloader.load('./door/height.jpg')
+const doorNormalTexture = textureloader.load('./door/normal.jpg')
+const doorMetalnessTexture = textureloader.load('./door/metalness.jpg')
+const doorRoughnessTexture = textureloader.load('./door/roughness.jpg')
+
+doorColorTexture.colorSpace = THREE.SRGBColorSpace
 //fixing texture color
 floorcolortexture.colorSpace=THREE.SRGBColorSpace
 wallcolortexture.colorSpace=THREE.SRGBColorSpace
-//for scale we repeat the texture making it small
+roofcolortexture.colorSpace=THREE.SRGBColorSpace
+bushcolortexture.colorSpace=THREE.SRGBColorSpace
+gravecolortexture.colorSpace=THREE.SRGBColorSpace
+//roof
+roofarmtexture.repeat.set(3,1)
+roofcolortexture.repeat.set(3,1)
+roofnormaltexture.repeat.set(3,1)
+
+roofarmtexture.wrapS=THREE.RepeatWrapping
+roofcolortexture.wrapS=THREE.RepeatWrapping
+roofnormaltexture.wrapS=THREE.RepeatWrapping
+
+//grave
+gravearmtexture.repeat.set(0.3,0.4)
+gravecolortexture.repeat.set(0.3,0.4)
+gravenormaltexture.repeat.set(0.3,0.4)
+
+//bush
+busharmtexture.repeat.set(2,1)
+bushcolortexture.repeat.set(2,1)
+bushnormaltexture.repeat.set(2,1)
+
+busharmtexture.wrapS=THREE.RepeatWrapping
+bushcolortexture.wrapS=THREE.RepeatWrapping
+bushnormaltexture.wrapS=THREE.RepeatWrapping
+//for scale we repeat the texture making it small (floor)
 floorcolortexture.repeat.set(6,6)
 floorcolortexture.wrapS= THREE.RepeatWrapping
 floorcolortexture.wrapT= THREE.RepeatWrapping
@@ -101,7 +152,14 @@ house.add(walls)
 
 const roof= new THREE.Mesh(
     new THREE.ConeGeometry(3.5,1.5,4),
-    new THREE.MeshStandardMaterial()
+    new THREE.MeshStandardMaterial({
+        map:roofcolortexture,
+        aoMap:roofarmtexture,
+        roughnessMap:roofarmtexture,
+        metalnessMap:roofarmtexture,
+        normalMap:roofnormaltexture
+        
+    })
 )
 roof.position.y += 2.5+0.75 //we added 0.75 as it the height (1.5)/2 the mid point is at center of the cone
 roof.rotation.y = Math.PI * 0.25
@@ -109,8 +167,19 @@ house.add(roof)
 
 //door
 const door=new THREE.Mesh (
-    new THREE.PlaneGeometry(2.2,2.2),
-    new THREE.MeshStandardMaterial({color:"red"})
+    new THREE.PlaneGeometry(2.2,2.2,100,100),
+    new THREE.MeshStandardMaterial({
+        map: doorColorTexture,
+        transparent: true,
+        alphaMap: doorAlphaTexture,
+        aoMap: doorAmbientOcclusionTexture,
+        displacementMap: doorHeightTexture,
+        normalMap: doorNormalTexture,
+        metalnessMap: doorMetalnessTexture,
+        roughnessMap: doorRoughnessTexture,
+        displacementScale: 0.15,
+        displacementBias: -0.04,
+    })
 )
 door.position.y=1
 door.position.z=2 +0.01
@@ -118,30 +187,45 @@ house.add(door)
 
 //bushes
 const bushGeometry=new THREE.SphereGeometry(1,16,16)
-const bushMaterial=new THREE.MeshStandardMaterial()
+const bushMaterial=new THREE.MeshStandardMaterial({
+    color:"#ccffcc",
+    map:bushcolortexture,
+    aoMap:busharmtexture,
+    roughnessMap:busharmtexture,
+    metalnessMap:busharmtexture,
+    normalMap:bushnormaltexture,
+})
 const bush1=new THREE.Mesh(bushGeometry,bushMaterial)
 bush1.scale.set(0.5,0.5,0.5) //we can us setscalar here
 bush1.position.set(0.8,0.2,2.2)
-
+bush1.rotation.x=-0.75
 
 const bush2=new THREE.Mesh(bushGeometry,bushMaterial)
 bush2.scale.setScalar(0.25) //we can us setscalar here
 bush2.position.set(1.4,0.1,2.1)
-
+bush2.rotation.x=-0.75
 
 const bush3=new THREE.Mesh(bushGeometry,bushMaterial)
 bush3.scale.set(0.4,0.4,0.4) //we can us setscalar here
 bush3.position.set(-0.8,0.1,2.2)
-
+bush3.rotation.x=-0.75
 
 const bush4=new THREE.Mesh(bushGeometry,bushMaterial)
 bush4.scale.set(0.15,0.15,0.15) //we can us setscalar here
 bush4.position.set(-1,0.05,2.6)
+bush4.rotation.x=-0.75
+
 house.add(bush1,bush2,bush3,bush4)
 
 //grave
 const graveGeomtry=new THREE.BoxGeometry(0.6,0.8,0.2)
-const graveMaterials= new THREE.MeshStandardMaterial()
+const graveMaterials= new THREE.MeshStandardMaterial({
+    map:gravecolortexture,
+    aoMap:gravearmtexture,
+    roughnessMap:gravearmtexture,
+    metalnessMap:gravearmtexture,
+    normalMap:gravenormaltexture,
+})
 
 
 
