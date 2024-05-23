@@ -30,6 +30,7 @@ one to is at front resulting in face colliding effect
 - PNG : Medium file size with no compression artefacts
 - JPG : small size with potentials compression
 artefacts
+- WEBP: BEST FOR OPTIMIZATION (for this approach we download png(loseless) and then comrpess to webp)
 
 # normally
 - we use jpg for all texture except for normal where we use png as it carries more data
