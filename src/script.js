@@ -137,6 +137,39 @@ scene.add(floor)
 const house =new THREE.Group()
 scene.add(house)
 //wall
+const firebase=new THREE.Mesh(
+    new THREE.BoxGeometry(0.15,1.5,0.15),//width,height,depth
+    new THREE.MeshStandardMaterial({
+        map:wallcolortexture,
+        aoMap:wallarmtexture,
+        roughnessMap:wallarmtexture,
+        metalnessMap:wallarmtexture,
+        normalMap:wallnormaltexture,
+    })
+)
+firebase.position.x= 3
+firebase.position.y=1.5/2
+firebase.position.z=3
+house.add(firebase)
+const fireholder=new THREE.Mesh(
+    new THREE.BoxGeometry(0.3,0.25,0.275,25,25),//width,height,depth
+    new THREE.MeshStandardMaterial({
+        wireframe:true,
+        map:wallcolortexture,
+        aoMap:wallarmtexture,
+        roughnessMap:wallarmtexture,
+        metalnessMap:wallarmtexture,
+        normalMap:wallnormaltexture,
+    })
+)
+fireholder.position.x= 3
+fireholder.position.y=1.5
+fireholder.position.z=3
+house.add(fireholder)
+
+const fire = new THREE.PointLight('#ff7d46', 5)
+fire.position.set(3,1.675,3)
+house.add(fire)
 const walls=new THREE.Mesh(
     new THREE.BoxGeometry(4,2.5,4),//width,height,depth
     new THREE.MeshStandardMaterial({
